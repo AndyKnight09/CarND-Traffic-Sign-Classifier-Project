@@ -5,3 +5,7 @@ models
 *.swp
 *.p
 traffic-signs-data
+checkpoint
+lenet.data-*
+lenet.index
+lenet.meta
