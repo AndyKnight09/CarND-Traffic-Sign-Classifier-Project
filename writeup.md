@@ -12,7 +12,22 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
+[img0]: "./plots/example_images.png" "Example Images"
+[img1]: "./plots/data_sets.png" "Data Sets"
+[img2]: "./plots/training_vs_validation.png" "Training vs. Validation"
+[img3]: "./plots/validation_vs_test.png" "Validation vs. Test"
+[img4]: "./plots/grayscale.png" "Grayscale Conversion"
+[img5]: "./plots/luma.png" "Luma Conversion"
+[img6]: "./plots/resized.png" "Resize Transformation"
+[img7]: "./plots/rotated.png" "Rotate Transformation"
+[img8]: "./plots/translated.png" "Translate Transformation"
+
+[img9]: "./internet-traffic-signs/8_speed_limit_120km.jpg" "Speed Limit 120km/h"
+[img10]: "./internet-traffic-signs/9_no_passing.jpg" "No passing"
+[img11]: "./internet-traffic-signs/13_yield.jpg" "Yield"
+[img12]: "./internet-traffic-signs/17_no_entry.jpg" "No Entry"
+[img13]: "./internet-traffic-signs/21_double_curve.jpg" "Double Curve"
+
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
@@ -47,32 +62,99 @@ signs data set:
 
 ####2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+Here is an exploratory visualization of the data set. Firstly I wanted to plot a couple of the training images to get an idea for the data set.
 
-![alt text][image1]
+![alt text][img0]
+
+Next I looked at the relative sizes of the training, validation and test sets. As we  can see most of the data is used for training with a small data set for validation and around 25% of the data held back to test the final network against. This should provide a reasonable measure of the accuracy of the network.
+
+![alt text][img1]
+
+Then I investigated the distribution of the data sets to see whether they matched. If the test data contained lots of 120km/h signs, for example, then I would want to make sure we are training the model using lots of them too. Likewise we want our validation set to match our training set. Looking at the histograms of the sign types in the data sets we can see that the split between training, validation and test sets is good.
+
+![alt text][img2]
+![alt text][img3]
+
+What we do notice is that the distribution of the different sign types is by no means uniform. Therefore training the model using this data I would expect it to be better at identifying certain signs. The table below shows the number of images for each type of traffic sign in the training data set. So I would expect the model to struggle more with signs at the top of the table than the bottom.
+
+| Traffic Sign | Samples |
+| --- | --- |
+| Speed limit (20km/h) | 180 |
+| Dangerous curve to the left | 180 |
+| Go straight or left | 180 |
+| Pedestrians | 210 |
+| End of all speed and passing limits | 210 |
+| End of no passing | 210 |
+| End of no passing by vehicles over 3.5 metric tons | 210 |
+| Road narrows on the right | 240 |
+| Bicycles crossing | 240 |
+| Double curve | 270 |
+| Keep left | 270 |
+| Dangerous curve to the right | 300 |
+| Roundabout mandatory | 300 |
+| Bumpy road | 330 |
+| Go straight or right | 330 |
+| End of speed limit (80km/h) | 360 |
+| Vehicles over 3.5 metric tons prohibited | 360 |
+| Turn left ahead | 360 |
+| Beware of ice/snow | 390 |
+| Slippery road | 450 |
+| Children crossing | 480 |
+| No vehicles | 540 |
+| Traffic signals | 540 |
+| Turn right ahead | 599 |
+| Stop | 690 |
+| Wild animals crossing | 690 |
+| No entry | 990 |
+| General caution | 1080 |
+| Ahead only | 1080 |
+| Right-of-way at the next intersection | 1170 |
+| Speed limit (60km/h) | 1260 |
+| Speed limit (120km/h) | 1260 |
+| Speed limit (100km/h) | 1290 |
+| No passing | 1320 |
+| Road work | 1350 |
+| Speed limit (80km/h) | 1650 |
+| Speed limit (70km/h) | 1770 |
+| No passing for vehicles over 3.5 metric tons | 1800 |
+| Keep right | 1860 |
+| Priority road | 1890 |
+| Yield | 1920 |
+| Speed limit (30km/h) | 1980 |
+| Speed limit (50km/h) | 2010 |
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because ...
+Initially I decided to convert the images to grayscale because it tends to reduce the effect of different lighting conditions on the image. 
 
 Here is an example of a traffic sign image before and after grayscaling.
 
-![alt text][image2]
+![alt text][img4]
 
-As a last step, I normalized the image data because ...
+However, having read the baseline model article [http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf "baseline model") I decided to use a YUV mapping taking the Y (or luma) component. The thought behind this move was that it would provide better contrast than the grayscale images.
 
-I decided to generate additional data because ... 
+![alt text][img5]
 
-To add more data to the the data set, I used the following techniques because ... 
+Having converted the images to a single colour channel (Y), I normalized the image data to zero mean and unit variance using the `sklearn.preprocessing.scale` function. This helps to keep the weights throughout the model similar which is important during back-propagation of error gradients to prevent the optimisation from becoming numerically unstable and therefore struggling to converge.
 
-Here is an example of an original image and an augmented image:
+I decided to generate additional data because the original data set contains images where all of the signs are reasonably well centred and orientated in the image. This won't lead to a model that is invariant to affine transformations of the signs which is what you would be likely to get in reality. Therefore I wrote functions to resize, rotate and translate the images randomly within specified limits to generated jittered versions of the original training data set.
 
-![alt text][image3]
+Here is an example of the transformed images:
 
-The difference between the original data set and the augmented data set is the following ... 
+![alt text][img6]
+![alt text][img7]
+![alt text][img8]
 
+Using these functions I created 5 jittered versions of each of the training images (rotated, translated and resized). Adding these to the training set gave the following new training set sizes:
+
+| Training Set | Shape |
+| --- | --- |
+| Original Images | (34799, 32, 32, 3) |
+| Original + Jittered Images | (208794, 32, 32, 3) |
+| Original Labels | (34799,) |
+| Original + Jittered Labels | (208794,) |
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
@@ -122,8 +204,8 @@ If a well known architecture was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][img9] ![alt text][img10] ![alt text][img11] 
+![alt text][img12] ![alt text][img13]
 
 The first image might be difficult to classify because ...
 
