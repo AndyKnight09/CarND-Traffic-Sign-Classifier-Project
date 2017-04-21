@@ -237,7 +237,11 @@ Given more time I would probably experiment more with the size of the convolutio
 
 Here are five German traffic signs that I found on the web:
 
-![speed limit 120km/h][img9] ![no passing][img10] ![yield][img11] ![no entry][img12] ![double curve][img13]
+<img src=img9 width="200" height="200" />
+<img src=img10 width="200" height="200" />
+<img src=img11 width="200" height="200" />
+<img src=img12 width="200" height="200" />
+<img src=img13 width="200" height="200" />
 
 Overall these are a pretty straightforward set of images to classify. They are all reasonably straight on to the camera and in good lighting conditions. The slightly difficult parts might be the slight shadowing over the no entry sign and the fact that there are additional signs underneath the 120km/h speed limit and double curve signs.
 
