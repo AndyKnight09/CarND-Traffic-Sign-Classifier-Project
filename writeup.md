@@ -145,7 +145,9 @@ I decided to generate additional data because the original data set contains ima
 Here is an example of the transformed images:
 
 ![resize transformation][img6]
+
 ![rotate transformation][img7]
+
 ![translate transformation][img8]
 
 Using these functions I created 5 jittered versions of each of the training images (rotated, translated and resized). Adding these to the training set gave the following new training set sizes:
@@ -186,7 +188,8 @@ My final model is based on the LeNet architecture and consisted of the following
 
 To train the model, I used a `tf.train.AdamOptimizer` and minimised the mean cross entropy of my model output. I found that the following hyperparameters gave me the best performance:
 
-`# Training iterations and batch size
+```python
+# Training iterations and batch size
 EPOCHS = 8               # Default = 10
 BATCH_SIZE = 256          # Default = 128
 
@@ -198,7 +201,8 @@ MU = 0                   # Default = 0
 SIGMA = 0.1              # Default = 0.1
 
 # Dropout parameters
-DROPOUT_KEEP_PROB = 0.75 # Default = 0.75`
+DROPOUT_KEEP_PROB = 0.75 # Default = 0.75
+```
 
 To train the model I experimented with different values for each of the parameters and then looked at how they affected the training and validation accuracy. 
 
@@ -233,8 +237,7 @@ Given more time I would probably experiment more with the size of the convolutio
 
 Here are five German traffic signs that I found on the web:
 
-![speed limit 120km/h][img9] ![no passing][img10] ![yield][img11] 
-![no entry][img12] ![double curve][img13]
+![speed limit 120km/h][img9] ![no passing][img10] ![yield][img11] ![no entry][img12] ![double curve][img13]
 
 Overall these are a pretty straightforward set of images to classify. They are all reasonably straight on to the camera and in good lighting conditions. The slightly difficult parts might be the slight shadowing over the no entry sign and the fact that there are additional signs underneath the 120km/h speed limit and double curve signs.
 
